@@ -1,26 +1,35 @@
-# Use official Python image
-FROM python:3.13-slim
+# Use a slim Python image
+FROM python:3.11-slim
 
-# Set environment variables
+# Set working directory
+WORKDIR /app
+
+# Prevent Python from writing pyc files and enable unbuffered output
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-
-# Set work directory
-WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Copy and install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project
+# Copy the rest of the project files
 COPY . .
+
+# Set Django environment variables (can be overridden in Render)
+ENV DJANGO_SETTINGS_MODULE=contacts.settings
+ENV PORT 8000
+ENV DEBUG=0
+
+# Ensure static root exists
+RUN mkdir -p /app/staticfiles
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
@@ -29,4 +38,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Start Gunicorn server
-CMD ["gunicorn", "contacts_project.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "contacts.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
