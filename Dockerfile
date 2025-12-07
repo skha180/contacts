@@ -11,7 +11,10 @@ ENV PYTHONUNBUFFERED 1
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
+<<<<<<< HEAD
     libpq-dev \
+=======
+>>>>>>> 23894a8 (Update settings.py for static files and update Dockerfile for Render deployment)
     curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,11 +26,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the project files
 COPY . .
 
+<<<<<<< HEAD
 # Set Django environment variables (can be overridden in Render)
 ENV DJANGO_SETTINGS_MODULE=contacts.settings
 ENV PORT 8000
 ENV DEBUG=0
 
+=======
+>>>>>>> 23894a8 (Update settings.py for static files and update Dockerfile for Render deployment)
 # Ensure static root exists
 RUN mkdir -p /app/staticfiles
 
