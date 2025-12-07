@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Add New Contact{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6 text-white">Add Contact</h2>
+
+<form method="POST" class="space-y-4 max-w-lg">
+    {% csrf_token %}
+
+    <!-- Name Field -->
+    <div class="flex flex-col">
+        <label class="mb-1 text-white font-semibold" for="{{ form.name.id_for_label }}">Name</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ form.name.errors|striptags }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Phone Field -->
+    <div class="flex flex-col">
+        <label class="mb-1 text-white font-semibold" for="{{ form.phone.id_for_label }}">Phone</label>
+        {{ form.phone }}
+        {% if form.phone.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ form.phone.errors|striptags }}</p>
+        {% endif %}
+    </div>
+
+    <!-- State Field -->
+    <div class="flex flex-col">
+        <label class="mb-1 text-white font-semibold" for="{{ form.state.id_for_label }}">State</label>
+        {{ form.state }}
+        {% if form.state.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ form.state.errors|striptags }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Address Field -->
+    <div class="flex flex-col">
+        <label class="mb-1 text-white font-semibold" for="{{ form.address.id_for_label }}">Address</label>
+        {{ form.address }}
+        {% if form.address.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ form.address.errors|striptags }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit"
+        class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded flex items-center gap-2 mt-2">
+        Save Contact
+    </button>
+</form>
+
+<a href="{% url 'list_contacts' %}" class="text-teal-400 hover:underline mt-4 inline-block">
+    ← Back to Contacts
+</a>
+{% endblock %}

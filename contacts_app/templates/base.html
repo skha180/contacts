@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Contacts App{% endblock %}</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'teal-dark': '#0f4c5c',
+              'teal-light': '#147994',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-teal-dark text-white min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-teal-light shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center flex-wrap">
+            <a href="{% url 'upload_csv' %}" class="font-bold text-2xl flex items-center gap-2">
+                <!-- Example Icon SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Contacts Manager
+            </a>
+
+            <div class="space-x-4 mt-2 md:mt-0 flex flex-wrap">
+                <a href="{% url 'upload_csv' %}" class="hover:underline flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4z" />
+                    </svg>
+                    Upload
+                </a>
+                <a href="{% url 'list_contacts' %}" class="hover:underline flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
+                    </svg>
+                    Contacts
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="container mx-auto flex-1 p-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-teal-light text-white p-4 mt-auto text-center shadow-inner">
+        &copy; {{ now|date:"Y" }} Contacts Manager
+    </footer>
+</body>
+</html>

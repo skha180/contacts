@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Contacts List{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-bold mb-4 text-white">All Contacts</h2>
+
+<div class="flex flex-col md:flex-row md:justify-between mb-4 gap-4">
+    <input type="text" id="searchInput" placeholder="Search contacts..."
+        class="border border-teal-500 bg-teal-800 text-white px-3 py-2 rounded w-full md:w-1/3 placeholder-gray-300"
+        onkeyup="filterContacts()">
+
+    <div class="flex gap-2">
+        <a href="{% url 'add_contact' %}"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-1">
+            <span class="font-bold">+</span> Add
+        </a>
+        <a href="{% url 'export_csv' %}"
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center gap-1">
+            ⬇ Export CSV
+        </a>
+    </div>
+</div>
+
+<!-- Scrollable table container -->
+<div class="overflow-x-auto border border-teal-500 rounded-lg">
+<table id="contactsTable" class="w-full text-white">
+    <thead class="bg-teal-600">
+        <tr>
+            <th class="px-3 py-2 border border-teal-500">NAME</th>
+            <th class="px-3 py-2 border border-teal-500">STATE</th>
+            <th class="px-3 py-2 border border-teal-500">PHONE</th>
+            <th class="px-3 py-2 border border-teal-500">ADDRESS</th>
+            <th class="px-3 py-2 border border-teal-500 text-center">ACTIONS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in contacts %}
+        <tr class="hover:bg-teal-700">
+            <!-- Capitalize name display -->
+            <td class="px-3 py-2 border border-teal-500 font-bold">{{ c.name|upper }}</td>
+            <td class="px-3 py-2 border border-teal-500 font-semibold">{{ c.state|upper }}</td>
+            <td class="px-3 py-2 border border-teal-500 font-semibold">{{ c.phone }}</td>
+
+            <!-- Limit address height but allow scroll -->
+            <td class="px-3 py-2 border border-teal-500 max-w-xs overflow-x-auto whitespace-nowrap font-semibold">
+                {{ c.address|upper }}
+            </td>
+
+            <!-- Edit / Delete actions -->
+            <td class="px-3 py-2 border border-teal-500 text-center space-x-2">
+
+                <a href="{% url 'edit_contact' c.id %}"
+                   class="bg-yellow-500 hover:bg-yellow-600 text-black px-2 py-1 rounded text-sm">
+                   Edit
+                </a>
+
+                <a href="{% url 'delete_contact' c.id %}"
+                   onclick="return confirm('Are you sure?');"
+                   class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-sm">
+                   Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<a href="{% url 'upload_csv' %}" class="text-teal-400 mt-4 inline-block hover:underline">
+    ← Back to Dashboard
+</a>
+
+<script>
+function filterContacts() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#contactsTable tbody tr");
+    rows.forEach(row => {
+        const match = Array.from(row.children).some(cell =>
+            cell.innerText.toLowerCase().includes(input)
+        );
+        row.style.display = match ? "" : "none";
+    });
+}
+</script>
+
+{% endblock %}
